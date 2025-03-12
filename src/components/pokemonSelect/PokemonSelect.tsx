@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchPokemons } from "../../../utils/fetchPokemons";
 import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
-import { Trainer } from "../../interface/Trainer";
+import { Trainer, Pokemon } from "../../interface/Trainer";
 
 interface PokemonSelectProps {
   register: UseFormRegister<Trainer>;
@@ -15,15 +15,16 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
   errors,
   setValue,
 }) => {
-  const [selectedPokemons, setSelectedPokemons] = useState<{ name: string }[]>(
-    []
-  );
-  const [pokemons, setPokemons] = useState<{ name: string }[]>([]);
+  const [selectedPokemons, setSelectedPokemons] = useState<
+    { name: string; url: string }[]
+  >([]);
+  const [pokemons, setPokemons] = useState<{ name: string; url: string }[]>([]);
   const [search, setSearch] = useState("");
   const [filteredPokemons, setFilteredPokemons] = useState<{ name: string }[]>(
     []
   );
   const [error, setError] = useState("");
+  const getPokemonId = (url: string) => url.split("/").slice(-2, -1)[0];
 
   useEffect(() => {
     const loadPokemons = async () => {
@@ -52,7 +53,17 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
       selectedPokemons.length < 4 &&
       !selectedPokemons.some((pokemon) => pokemon.name === pokemonName)
     ) {
-      setSelectedPokemons((prev) => [...prev, { name: pokemonName }]);
+      const pokemon = pokemons.find((p) => p.name === pokemonName);
+      if (pokemon) {
+        const id = getPokemonId(pokemon.url);
+
+        const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+        console.log(spriteUrl);
+        setSelectedPokemons((prev) => [
+          ...prev,
+          { name: pokemon.name, url: spriteUrl },
+        ]);
+      }
     }
   };
 
@@ -100,9 +111,10 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
         {selectedPokemons.map((pokemon, index) => (
           <li
             key={index}
-            className="px-2.5 py-0.5 bg-[#4724c8] text-white border rounded-[20px]"
+            className="px-2.5 py-0.5  text-black border rounded-[20px]"
           >
             {pokemon.name}
+            <img src={pokemon.url} alt={pokemon.name} />
             <span
               className="ml-[5px] cursor-pointer"
               onClick={() => onHandleDelete(pokemon.name)}
@@ -118,7 +130,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
         type="hidden"
         {...register("selectedPokemons", {
           validate: (value: { name: string }[]) =>
-            value.length === 4 || "Команда должна содержать 4 покемона",
+            value.length === 4 || "The team must contain 4 Pokémon",
         })}
       />
     </div>

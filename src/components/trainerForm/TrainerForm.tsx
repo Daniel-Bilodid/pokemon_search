@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PokemonSelect from "../pokemonSelect/PokemonSelect";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Trainer } from "../../interface/Trainer";
+import Modal from "../modal/Modal";
 
 const TrainerForm = () => {
   const {
@@ -11,12 +12,16 @@ const TrainerForm = () => {
     setValue,
   } = useForm<Trainer>();
 
-  const onSubmit: SubmitHandler<Trainer> = (data) => {
-    console.log(data);
-  };
   const [name, setName] = useState("");
   const [surName, setSurName] = useState("");
+  const [data, setData] = useState<Trainer | null>(null);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const onSubmit: SubmitHandler<Trainer> = (data) => {
+    setData(data);
+    setIsOpen(true);
+  };
+  console.log("data", data);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-5xl mb-[25px]">TrainerForm</h1>
@@ -85,6 +90,7 @@ const TrainerForm = () => {
         </div>
       </div>
       <PokemonSelect register={register} errors={errors} setValue={setValue} />
+      <Modal data={data} isOpen={isOpen} />
 
       <button className="bg-[#4724c8] w-48px p-4 rounded-[20px] text-white cursor-pointer">
         Show Team
