@@ -44,18 +44,31 @@ const PokemonSelect = () => {
     }
   };
 
+  const onHandleDelete = (pokemonName: string) => {
+    setSelectedPokemons(
+      selectedPokemons.filter((pokemon) => pokemon.name !== pokemonName)
+    );
+    setError("");
+  };
+
   return (
     <div className="p-4 ">
-      <label className="block text-gray-700">Select pokemon:</label>
-      <div className="flex flex-col">
-        <input
-          type="text"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-          placeholder="Search for pokemons..."
-        />
+      <div className="flex flex-col gap-[10px]">
+        <div className="mx-auto w-[400px]">
+          <label className="block text-gray-700 text-left mb-2" htmlFor="input">
+            Select pokemon:
+          </label>
+          <input
+            className="border py-3 px-4 rounded w-full"
+            id="input"
+            type="text"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            placeholder="Search for pokemons..."
+          />
+        </div>
         <select
-          className="border p-2 rounded "
+          className="border py-2 px-3 rounded w-[400px] rounded-[4px] mx-auto"
           onChange={(e) => handleSelectPokemon(e.target.value)}
         >
           <option value="">Select...</option>
@@ -66,12 +79,24 @@ const PokemonSelect = () => {
           ))}
         </select>
       </div>
-      <ul className="flex justify-center list-none gap-[10px]">
+      <ul className="flex justify-center list-none gap-[10px] mt-[20px]">
         {selectedPokemons.map((pokemon, index) => (
-          <li className="p-5 bg-red-500 text-white">{pokemon.name}</li>
+          <li
+            key={index}
+            className="px-2.5 py-0.5 bg-green-500 text-white border-1 rounded-[20px]"
+          >
+            {pokemon.name}
+
+            <span
+              className="ml-[5px] cursor-pointer"
+              onClick={() => onHandleDelete(pokemon.name)}
+            >
+              x
+            </span>
+          </li>
         ))}
       </ul>
-      <p>{error}</p>
+      <p className="text-red-500 ">{error}</p>
     </div>
   );
 };

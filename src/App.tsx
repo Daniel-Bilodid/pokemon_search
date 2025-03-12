@@ -1,10 +1,10 @@
 import "./App.css";
-import PokemonSelect from "./components/pokemonSelect/PokemonSelect";
+import TrainerForm from "./components/trainerForm/TrainerForm";
 
 function App() {
   return (
     <>
-      <PokemonSelect />
+      <TrainerForm />
     </>
   );
 }

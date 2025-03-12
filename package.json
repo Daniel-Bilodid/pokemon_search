@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.0.13",
     "@tailwindcss/vite": "^4.0.13",
     "axios": "^1.8.3",
     "react": "^19.0.0",
