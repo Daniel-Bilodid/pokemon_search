@@ -1,7 +1,20 @@
+// PokemonSelect.tsx
 import React, { useState, useEffect } from "react";
 import { fetchPokemons } from "../../../utils/fetchPokemons";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { Trainer } from "../../interface/Trainer";
 
-const PokemonSelect = () => {
+interface PokemonSelectProps {
+  register: UseFormRegister<Trainer>;
+  errors: FieldErrors<Trainer>;
+  setValue: UseFormSetValue<Trainer>;
+}
+
+const PokemonSelect: React.FC<PokemonSelectProps> = ({
+  register,
+  errors,
+  setValue,
+}) => {
   const [selectedPokemons, setSelectedPokemons] = useState<{ name: string }[]>(
     []
   );
@@ -11,6 +24,7 @@ const PokemonSelect = () => {
     []
   );
   const [error, setError] = useState("");
+
   useEffect(() => {
     const loadPokemons = async () => {
       const data = await fetchPokemons();
@@ -29,18 +43,16 @@ const PokemonSelect = () => {
     );
   }, [pokemons, search]);
 
+  useEffect(() => {
+    setValue("selectedPokemons", selectedPokemons, { shouldValidate: true });
+  }, [selectedPokemons, setValue]);
+
   const handleSelectPokemon = (pokemonName: string) => {
     if (
       selectedPokemons.length < 4 &&
       !selectedPokemons.some((pokemon) => pokemon.name === pokemonName)
     ) {
-      setSelectedPokemons((prevPokemon) => [
-        ...prevPokemon,
-        { name: pokemonName },
-      ]);
-      setError("");
-    } else {
-      setError("You cant pick more than 4 pokemons");
+      setSelectedPokemons((prev) => [...prev, { name: pokemonName }]);
     }
   };
 
@@ -48,11 +60,10 @@ const PokemonSelect = () => {
     setSelectedPokemons(
       selectedPokemons.filter((pokemon) => pokemon.name !== pokemonName)
     );
-    setError("");
   };
 
   return (
-    <div className="p-4 ">
+    <div className="p-4">
       <div className="flex flex-col gap-[10px]">
         <div className="mx-auto w-[400px]">
           <label className="block text-gray-700 text-left mb-2" htmlFor="input">
@@ -68,25 +79,30 @@ const PokemonSelect = () => {
           />
         </div>
         <select
-          className="border py-2 px-3 rounded w-[400px] rounded-[4px] mx-auto"
+          className="border py-2 px-3 rounded w-[400px] mx-auto"
           onChange={(e) => handleSelectPokemon(e.target.value)}
         >
           <option value="">Select...</option>
-          {filteredPokemons.map((pokemon, key) => (
-            <option value={pokemon.name} key={key}>
+          {filteredPokemons.map((pokemon, index) => (
+            <option value={pokemon.name} key={index}>
               {pokemon.name}
             </option>
           ))}
         </select>
+
+        {errors.selectedPokemons && (
+          <span className="text-red-500">
+            {errors.selectedPokemons.message as string}
+          </span>
+        )}
       </div>
       <ul className="flex justify-center list-none gap-[10px] mt-[20px]">
         {selectedPokemons.map((pokemon, index) => (
           <li
             key={index}
-            className="px-2.5 py-0.5 bg-green-500 text-white border-1 rounded-[20px]"
+            className="px-2.5 py-0.5 bg-[#4724c8] text-white border rounded-[20px]"
           >
             {pokemon.name}
-
             <span
               className="ml-[5px] cursor-pointer"
               onClick={() => onHandleDelete(pokemon.name)}
@@ -96,7 +112,15 @@ const PokemonSelect = () => {
           </li>
         ))}
       </ul>
-      <p className="text-red-500 ">{error}</p>
+      <p className="text-red-500">{error}</p>
+
+      <input
+        type="hidden"
+        {...register("selectedPokemons", {
+          validate: (value: { name: string }[]) =>
+            value.length === 4 || "Команда должна содержать 4 покемона",
+        })}
+      />
     </div>
   );
 };
