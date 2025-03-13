@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchPokemons } from "../../../utils/fetchPokemons";
 import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
-import { Trainer, Pokemon } from "../../interface/Trainer";
+import { Trainer } from "../../interface/Trainer";
 
 interface PokemonSelectProps {
   register: UseFormRegister<Trainer>;
@@ -25,7 +25,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
   const [filteredPokemons, setFilteredPokemons] = useState<{ name: string }[]>(
     []
   );
-  const [error, setError] = useState("");
+
   const getPokemonId = (url: string) => url.split("/").slice(-2, -1)[0];
 
   useEffect(() => {
@@ -126,7 +126,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
           </li>
         ))}
       </ul>
-      <p className="text-red-500">{error}</p>
+
       <input
         type="hidden"
         {...register("selectedPokemons", {

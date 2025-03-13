@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PokemonSelect from "../pokemonSelect/PokemonSelect";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Trainer } from "../../interface/Trainer";
