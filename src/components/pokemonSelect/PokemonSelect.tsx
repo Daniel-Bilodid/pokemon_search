@@ -78,7 +78,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
   return (
     <div className="p-4">
       <div className="flex flex-col gap-[10px]">
-        <div className="mx-auto w-[400px]">
+        <div className="mx-auto w-full sm:w-96 lg:w-1/2">
           <label className="block text-gray-700 text-left mb-2" htmlFor="input">
             Select pokemon:
           </label>
@@ -92,7 +92,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
           />
         </div>
         <select
-          className="border py-2 px-3 rounded w-[400px] mx-auto"
+          className="border py-2 px-3 rounded w-full sm:w-96 lg:w-1/2 mx-auto"
           onChange={(e) => handleSelectPokemon(e.target.value)}
         >
           <option value="">Select...</option>
@@ -109,7 +109,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
           </span>
         )}
       </div>
-      <ul className="flex justify-center list-none gap-[10px] mt-[20px]">
+      <ul className="flex flex-wrap justify-center list-none gap-[10px] mt-[20px]">
         {selectedPokemons.map((pokemon, index) => (
           <li
             key={index}

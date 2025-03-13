@@ -31,11 +31,12 @@ const TrainerForm = () => {
     setIsOpen((prevState) => !prevState);
   };
   console.log("data", data);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1 className="text-5xl mb-[25px]">TrainerForm</h1>
-      <div className="flex justify-center flex-col">
-        <div className="mx-auto w-[400px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="px-4 sm:px-6 lg:px-8">
+      <h1 className="text-5xl mb-6 text-center">TrainerForm</h1>
+      <div className="flex flex-col items-center">
+        <div className="w-full sm:w-96 lg:w-1/2">
           <label className="block text-gray-700 text-left mb-2" htmlFor="input">
             Name:
           </label>
@@ -66,7 +67,8 @@ const TrainerForm = () => {
             <span className="text-red-500">{errors.name.message}</span>
           )}
         </div>
-        <div className="mx-auto w-[400px]">
+
+        <div className="w-full sm:w-96 lg:w-1/2 mt-4">
           <label className="block text-gray-700 text-left mb-2" htmlFor="input">
             Surname:
           </label>
@@ -94,21 +96,25 @@ const TrainerForm = () => {
             onChange={(e) => setSurName(e.target.value)}
           />
           {errors.surName && (
-            <span className="text-red-500 ">{errors.surName.message}</span>
+            <span className="text-red-500">{errors.surName.message}</span>
           )}
         </div>
       </div>
+
       <PokemonSelect
         register={register}
         errors={errors}
         setValue={setValue}
         isSubmitted={isSubmitted}
       />
+
       <Modal data={data} isOpen={isOpen} onClose={onClose} />
 
-      <button className="bg-[#4724c8] w-48px p-4 rounded-[20px] text-white cursor-pointer">
-        Show Team
-      </button>
+      <div className="flex justify-center mt-6">
+        <button className="bg-[#4724c8] w-full sm:w-auto p-4 rounded-[20px] text-white cursor-pointer text-center">
+          Show Team
+        </button>
+      </div>
     </form>
   );
 };
