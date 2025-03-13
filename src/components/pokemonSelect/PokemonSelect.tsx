@@ -8,12 +8,14 @@ interface PokemonSelectProps {
   register: UseFormRegister<Trainer>;
   errors: FieldErrors<Trainer>;
   setValue: UseFormSetValue<Trainer>;
+  isSubmitted: boolean;
 }
 
 const PokemonSelect: React.FC<PokemonSelectProps> = ({
   register,
   errors,
   setValue,
+  isSubmitted,
 }) => {
   const [selectedPokemons, setSelectedPokemons] = useState<
     { name: string; url: string }[]
@@ -101,7 +103,7 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
           ))}
         </select>
 
-        {errors.selectedPokemons && (
+        {isSubmitted && errors.selectedPokemons && (
           <span className="text-red-500">
             {errors.selectedPokemons.message as string}
           </span>
@@ -125,12 +127,12 @@ const PokemonSelect: React.FC<PokemonSelectProps> = ({
         ))}
       </ul>
       <p className="text-red-500">{error}</p>
-
       <input
         type="hidden"
         {...register("selectedPokemons", {
+          required: "Pokemons are required",
           validate: (value: { name: string }[]) =>
-            value.length === 4 || "The team must contain 4 Pokémon",
+            value.length === 4 || "A complete team requires exactly 4 Pokémon",
         })}
       />
     </div>

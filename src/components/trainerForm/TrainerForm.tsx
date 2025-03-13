@@ -8,9 +8,14 @@ const TrainerForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitted },
     setValue,
-  } = useForm<Trainer>();
+  } = useForm<Trainer>({
+    mode: "onSubmit",
+    defaultValues: {
+      selectedPokemons: [],
+    },
+  });
 
   const [name, setName] = useState("");
   const [surName, setSurName] = useState("");
@@ -20,6 +25,10 @@ const TrainerForm = () => {
   const onSubmit: SubmitHandler<Trainer> = (data) => {
     setData(data);
     setIsOpen(true);
+  };
+
+  const onClose = () => {
+    setIsOpen((prevState) => !prevState);
   };
   console.log("data", data);
   return (
@@ -89,8 +98,13 @@ const TrainerForm = () => {
           )}
         </div>
       </div>
-      <PokemonSelect register={register} errors={errors} setValue={setValue} />
-      <Modal data={data} isOpen={isOpen} />
+      <PokemonSelect
+        register={register}
+        errors={errors}
+        setValue={setValue}
+        isSubmitted={isSubmitted}
+      />
+      <Modal data={data} isOpen={isOpen} onClose={onClose} />
 
       <button className="bg-[#4724c8] w-48px p-4 rounded-[20px] text-white cursor-pointer">
         Show Team
